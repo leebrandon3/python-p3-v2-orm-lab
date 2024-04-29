@@ -1,6 +1,7 @@
 # lib/employee.py
 from __init__ import CURSOR, CONN
 from department import Department
+from review import Review
 
 class Employee:
 
@@ -187,4 +188,14 @@ class Employee:
 
     def reviews(self):
         """Return list of reviews associated with current employee"""
-        pass
+        sql='''SELECT * FROM reviews WHERE employee_id = ?'''
+        review_tuple = CURSOR.execute(sql, [self.id]).fetchall()
+        review_list = []
+        for review in review_tuple:
+            this_review = Review(year=review[1], summary=review[2], employee_id=review[3])
+            this_review.id = review[0]
+            review_list.append(this_review)
+
+        print(review_tuple)
+        print(review_list)
+        return review_list
